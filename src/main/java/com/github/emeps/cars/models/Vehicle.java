@@ -40,4 +40,13 @@ public class Vehicle {
     @ManyToMany
     private List<Optional> optionals;
 
+    public Vehicle(Integer kilometers, String color, String description, Integer year, Model model) {
+        this.kilometers = kilometers;
+        this.color = color;
+        this.description = description;
+        this.year = year;
+        this.model = model;
+        this.available= true;
+        this.optionals = List.of();
+    }
 }
