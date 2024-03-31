@@ -1,12 +1,14 @@
 package com.github.emeps.cars.controllers;
 
 import com.github.emeps.cars.DTOS.CreateVehicleData;
-import com.github.emeps.cars.models.Vehicle;
+import com.github.emeps.cars.DTOS.VehicleDetailsData;
+import com.github.emeps.cars.DTOS.UpdateVehicleData;
+import com.github.emeps.cars.pagination.Page;
 import com.github.emeps.cars.services.VehicleService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/vehicles")
@@ -15,26 +17,28 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
     @GetMapping
-    public  List<Vehicle> index(){
-        return  vehicleService.list();
+    public Page<VehicleDetailsData> index(Pageable pageable){
+        var page = vehicleService.list(pageable);
+        return page.map(VehicleDetailsData::new);
     }
 
-    @GetMapping("/{id}")
-    public Vehicle show(@PathVariable("id") Long id){
-        return vehicleService.show(id);
+    @GetMapping("/show/{id}")
+    public VehicleDetailsData show(@PathVariable("id") Long id){
+        return new VehicleDetailsData(vehicleService.show(id));
     }
 
     @PostMapping("/create")
-    public Vehicle create(@RequestBody CreateVehicleData data ){
-        return vehicleService.create(data);
+    public VehicleDetailsData create(@RequestBody @Validated CreateVehicleData data ){
+        return new VehicleDetailsData(vehicleService.create(data));
     }
 
-    @PutMapping("/{id}")
-    public Vehicle update(Vehicle vehicle, @PathVariable("id")Long id){
-        return vehicleService.update(vehicle, id);
+    @PutMapping("/update/{id}")
+    public VehicleDetailsData update(@RequestBody @Validated UpdateVehicleData vehicle, @PathVariable("id")Long id){
+        return new VehicleDetailsData(vehicleService.update(
+                vehicle, id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id")Long id){
         vehicleService.deleteById(id);
     }
