@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateVehicleData {
+public class UpdateVehicleData {
     @Min(value = 0)
     @NotNull
     private Integer kilometers;
@@ -24,5 +24,4 @@ public class CreateVehicleData {
 
     @NotNull
     private Long modelId;
-
 }
