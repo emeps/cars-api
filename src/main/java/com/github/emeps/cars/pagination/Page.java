@@ -32,6 +32,6 @@ public class Page <T>{
 
     public <U> Page<U> map(Function <? super T, ?extends  U> converter){
         var content = this.content.stream().map(converter).toList();
-        return new Page<U>(this.page, this.size, this.total_elements, content);
+        return new Page<>(this.page, this.size, this.total_elements, content);
     }
 }
